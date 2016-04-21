@@ -8,8 +8,8 @@ import java.sql.PreparedStatement;
  */
 public abstract class SqlGenerator {
     //DDL
-    protected abstract String getCreateTable(Connection com, Object obj);
-    protected abstract String getDropTable(Object obj);
+    protected abstract String getCreateTable(Connection con, Object obj);
+    protected abstract String getDropTable(Connection con, Object obj);
 
     //DML
     protected abstract PreparedStatement getSqlInsert(Object obj);

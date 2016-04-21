@@ -4,6 +4,7 @@ import br.univel.annotation.Column;
 import br.univel.annotation.Table;
 
 import java.lang.reflect.Field;
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -17,7 +18,7 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected String getCreateTable(Connection com, Object obj) {
+    protected String getCreateTable(Connection con, Object obj) {
         try {
             String nameTable;
             Class<?> cl = obj.getClass();
@@ -100,7 +101,7 @@ public class Execute extends SqlGenerator {
             sb.append("\n);");
 
             String create = sb.toString();
-            Statement execute = com.createStatement();
+            Statement execute = con.createStatement();
             execute.executeUpdate(create);
 
             return create;
@@ -114,8 +115,30 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected String getDropTable(Object obj) {
-        return null;
+    protected String getDropTable(Connection con, Object obj) {
+        try {
+            String nameTable;
+            StringBuilder sb = new StringBuilder();
+
+            Class<?> cl = obj.getClass();
+
+            if (cl.isAnnotationPresent(Table.class)) {
+                Table table = cl.getAnnotation(Table.class);
+                nameTable = table.value();
+            } else {
+                nameTable = cl.getSimpleName().toUpperCase();
+            }
+
+            sb.append("DROP TABLE ").append(nameTable).append(";");
+            String drop = sb.toString();
+
+            Statement execute = con.createStatement();
+            execute.executeUpdate(drop);
+            return drop;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Column {
     String name() default "";
+    int size() default -1;
     boolean pk() default false;
 }

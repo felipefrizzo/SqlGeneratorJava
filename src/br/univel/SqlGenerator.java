@@ -1,5 +1,6 @@
 package br.univel;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 /**
@@ -7,7 +8,7 @@ import java.sql.PreparedStatement;
  */
 public abstract class SqlGenerator {
     //DDL
-    protected abstract String getCreateTable(Object obj);
+    protected abstract String getCreateTable(Connection com, Object obj);
     protected abstract String getDropTable(Object obj);
 
     //DML

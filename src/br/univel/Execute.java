@@ -69,8 +69,9 @@ public class Execute extends SqlGenerator {
 
                 sb.append("\n\tPRIMARY KEY(");
 
-                for (int i = 0, get = 0; i < attributes.length; i++) {
-                    Field fields = attributes[i];
+                for (int y = 0; y < attributes.length; y++) {
+                    int get = 0;
+                    Field fields = attributes[y];
 
                     if (fields.isAnnotationPresent(Column.class)) {
                         Column annotationColumn = field.getAnnotation(Column.class);
@@ -94,8 +95,8 @@ public class Execute extends SqlGenerator {
             sb.append("\n);");
 
             return sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
         }
     }
 

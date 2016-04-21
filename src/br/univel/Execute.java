@@ -91,6 +91,9 @@ public class Execute extends SqlGenerator {
                 }
                 sb.append(" )");
             }
+            sb.append("\n);");
+
+            return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }

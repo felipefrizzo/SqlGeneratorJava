@@ -13,8 +13,8 @@ public abstract class SqlGenerator {
 
     //DML
     protected abstract PreparedStatement getSqlInsert(Connection con, Object obj);
-    protected abstract PreparedStatement getSqlSelectAll(Object obj);
-    protected abstract PreparedStatement getSqlSelectById(Object obj);
+    protected abstract PreparedStatement getSqlSelectAll(Connection con, Object obj);
+    protected abstract PreparedStatement getSqlSelectById(Connection con, Object obj, int id);
     protected abstract PreparedStatement getSqlUpdateById(Object obj);
     protected abstract PreparedStatement getSqlDeleteById(Object obj);
 }

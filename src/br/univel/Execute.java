@@ -8,10 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.ConnectException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Created by felipefrizzo on 4/20/16.
@@ -231,12 +228,33 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected PreparedStatement getSqlSelectAll(Object obj) {
-        return null;
+    protected PreparedStatement getSqlSelectAll(Connection con, Object obj) {
+        Class<?> cl = obj.getClass();
+        StringBuilder sb = new StringBuilder();
+        String nameTable;
+
+        if (cl.isAnnotationPresent(Table.class)) {
+            Table table = cl.getAnnotation(Table.class);
+            nameTable = table.value();
+        } else {
+            nameTable = cl.getSimpleName().toUpperCase();
+        }
+        sb.append("SELECT * FROM ").append(nameTable).append(";");
+
+        String select = sb.toString();
+        System.out.println(select);
+        PreparedStatement ps = null;
+
+        try {
+            ps = con.prepareStatement(select);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ps;
     }
 
     @Override
-    protected PreparedStatement getSqlSelectById(Object obj) {
+    protected PreparedStatement getSqlSelectById(Connection con, Object obj, int id) {
         return null;
     }
 

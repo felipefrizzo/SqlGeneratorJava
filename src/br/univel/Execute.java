@@ -2,13 +2,14 @@ package br.univel;
 
 import br.univel.annotation.Column;
 import br.univel.annotation.Table;
-import br.univel.enums.EstadoCivil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.ConnectException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by felipefrizzo on 4/20/16.

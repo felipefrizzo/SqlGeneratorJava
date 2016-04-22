@@ -2,8 +2,11 @@ package br.univel;
 
 import br.univel.annotation.Column;
 import br.univel.annotation.Table;
+import br.univel.enums.EstadoCivil;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -96,8 +99,10 @@ public class Execute extends SqlGenerator {
                         get++;
                     }
                 }
+                if (y == attributes.length - 1) {
+                    sb.append(")");
+                }
             }
-            sb.append(")");
             sb.append("\n);");
 
             String create = sb.toString();
@@ -142,8 +147,87 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected PreparedStatement getSqlInsert(Object obj) {
-        return null;
+    protected PreparedStatement getSqlInsert(Connection con, Object obj) {
+        Class<?> cl = obj.getClass();
+        StringBuilder sb = new StringBuilder();
+        String nameTable;
+
+        if (cl.isAnnotationPresent(Table.class)) {
+            Table table = cl.getAnnotation(Table.class);
+            nameTable = table.value();
+        } else {
+            nameTable = cl.getSimpleName().toUpperCase();
+        }
+
+        sb.append("INSERT INTO ").append(nameTable).append(" (");
+
+        Field[] attributes = cl.getDeclaredFields();
+
+        for (int i = 0; i < attributes.length; i++) {
+            Field field = attributes[i];
+            String nameColumn;
+
+            if (field.isAnnotationPresent(Column.class)) {
+                Column column = field.getAnnotation(Column.class);
+                if (column.name().isEmpty()) {
+                    nameColumn = field.getName().toUpperCase();
+                } else {
+                    nameColumn = column.name();
+                }
+            } else {
+                nameColumn = field.getName().toUpperCase();
+            }
+
+            if (i > 0) {
+                sb.append(", ");
+            }
+
+            sb.append(nameColumn);
+        }
+
+        sb.append(") VALUES (");
+
+        for (int i = 0; i < attributes.length; i++) {
+            if (i > 0) sb.append(", ");
+
+            sb.append("?");
+        }
+        sb.append(")");
+        String insert = sb.toString();
+        System.out.println(insert);
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = con.prepareStatement(insert);
+
+            for (int i = 0; i < attributes.length; i++) {
+                Field field = attributes[i];
+                Object type = field.getType();
+
+                field.setAccessible(true);
+                if (type.equals(int.class)) {
+                    ps.setInt(i + 1, field.getInt(obj));
+                } else if (type.equals(String.class)) {
+                    ps.setString(i + 1, String.valueOf(field.get(obj)));
+                } else if (field.getType().isEnum()) {
+                    Object value = field.get(obj);
+                    Method m = value.getClass().getMethod("ordinal");
+                    ps.setInt(i + 1, (Integer) m.invoke(value, null));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return ps;
     }
 
     @Override

@@ -12,7 +12,7 @@ public abstract class SqlGenerator {
     protected abstract String getDropTable(Connection con, Object obj);
 
     //DML
-    protected abstract PreparedStatement getSqlInsert(Object obj);
+    protected abstract PreparedStatement getSqlInsert(Connection con, Object obj);
     protected abstract PreparedStatement getSqlSelectAll(Object obj);
     protected abstract PreparedStatement getSqlSelectById(Object obj);
     protected abstract PreparedStatement getSqlUpdateById(Object obj);

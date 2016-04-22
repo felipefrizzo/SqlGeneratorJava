@@ -235,8 +235,7 @@ public class Execute extends SqlGenerator {
         String nameTable;
 
         if (cl.isAnnotationPresent(Table.class)) {
-            Table table = cl.getAnnotation(Table.class);
-            nameTable = table.value();
+            nameTable = cl.getAnnotation(Table.class).value();
         } else {
             nameTable = cl.getSimpleName().toUpperCase();
         }
@@ -256,7 +255,27 @@ public class Execute extends SqlGenerator {
 
     @Override
     protected PreparedStatement getSqlSelectById(Connection con, Object obj, int id) {
-        return null;
+        Class<?> cl = obj.getClass();
+        StringBuilder sb = new StringBuilder();
+        String nameTable;
+
+        if (cl.isAnnotationPresent(Table.class)) {
+            nameTable = cl.getAnnotation(Table.class).value();
+        } else {
+            nameTable = cl.getSimpleName().toUpperCase();
+        }
+
+        sb.append("SELECT * FROM ").append(nameTable).append(" WHERE ID=").append(id).append(";");
+        String select = sb.toString();
+        System.out.println(select);
+        PreparedStatement ps = null;
+
+        try {
+            ps = con.prepareStatement(select);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ps;
     }
 
     @Override

@@ -88,7 +88,21 @@ public class ClientDaoImplatation implements Dao<Client,Integer> {
 
     @Override
     public void delete(Integer integer) {
-
+        try {
+            Client cl = new Client();
+            ps = ex.getSqlDeleteById(con, cl, integer);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Cliente excluido com sucesso!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package br.univel;
+package br.univel.database;
 
 import br.univel.annotation.Column;
 import br.univel.annotation.Table;
@@ -354,7 +354,7 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected PreparedStatement getSqlDeleteById(Connection con, Object obj, int id) {
+    public PreparedStatement getSqlDeleteById(Connection con, Object obj, int id) {
         PreparedStatement ps = null;
         try {
             Class<?> cl = obj.getClass();

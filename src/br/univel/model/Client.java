@@ -1,4 +1,4 @@
-package br.univel;
+package br.univel.model;
 
 import br.univel.annotation.Column;
 import br.univel.annotation.Table;

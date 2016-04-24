@@ -20,6 +20,10 @@ public class Client {
     @Column(name="ESTADOCIVIL", size = 255)
     private EstadoCivil estadoCivil;
 
+    public Client() {
+
+    }
+
     public Client(int id, String name, String endereco, String telefone, EstadoCivil estadoCivil) {
         this.id = id;
         this.name = name;

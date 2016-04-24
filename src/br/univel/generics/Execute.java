@@ -20,7 +20,7 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected String getCreateTable(Connection con, Object obj) {
+    public String getCreateTable(Connection con, Object obj) {
         try {
             String nameTable;
             Class<?> cl = obj.getClass();
@@ -105,6 +105,7 @@ public class Execute extends SqlGenerator {
             sb.append("\n);");
 
             String create = sb.toString();
+            System.out.println(create);
             Statement execute = con.createStatement();
             execute.executeUpdate(create);
 
@@ -119,7 +120,7 @@ public class Execute extends SqlGenerator {
     }
 
     @Override
-    protected String getDropTable(Connection con, Object obj) {
+    public String getDropTable(Connection con, Object obj) {
         try {
             String nameTable;
             StringBuilder sb = new StringBuilder();
@@ -136,6 +137,7 @@ public class Execute extends SqlGenerator {
             sb.append("DROP TABLE ").append(nameTable).append(";");
             String drop = sb.toString();
 
+            System.out.println(drop);
             Statement execute = con.createStatement();
             execute.executeUpdate(drop);
             return drop;

@@ -72,11 +72,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Client cl1 = new Client(1, "Felipe", "Rua: Nao Sei", "(45)9970-7070", EstadoCivil.SOLTEIRO);
+        Client cl1 = new Client(1, "Felipe Frizzo", "Rua: Nao Sei", "(45)9970-7070", EstadoCivil.SOLTEIRO);
         Client cl2 = new Client(2, "Frizzo", "Rua: Jaozinho da Silva", "(45)9970-7070", EstadoCivil.CASADO);
         Client cl3 = new Client(3, "Felipe Felipe", "Rua: Brasil", "(45)9970-7070", EstadoCivil.VIUVO);
 
-        Client cl_update = new Client(1, "Felipe Felipe", "Rua: Python <3", "(45)9969-6970", EstadoCivil.CASADO);
+        Client cl_update = new Client(1, "Felipe", "Rua: Python <3", "(45)9969-6970", EstadoCivil.CASADO);
 
         Main main = new Main();
         //Table
@@ -92,7 +92,7 @@ public class Main {
 
         main.update(cl_update);
         main.delete(2);
-        
+
         main.listAll();
     }
 }

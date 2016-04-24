@@ -355,6 +355,26 @@ public class Execute extends SqlGenerator {
 
     @Override
     protected PreparedStatement getSqlDeleteById(Connection con, Object obj, int id) {
-        return null;
+        PreparedStatement ps = null;
+        try {
+            Class<?> cl = obj.getClass();
+            StringBuilder sb = new StringBuilder();
+            String nameTable;
+
+            if (cl.isAnnotationPresent(Table.class)) {
+                nameTable = cl.getAnnotation(Table.class).value();
+            } else {
+                nameTable = cl.getSimpleName().toUpperCase();
+            }
+
+            sb.append("DELETE FROM ").append(nameTable).append(" WHERE ID = ").append(id).append(";");
+            String delete = sb.toString();
+            System.out.println(delete);
+
+            ps = con.prepareStatement(delete);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ps;
     }
 }

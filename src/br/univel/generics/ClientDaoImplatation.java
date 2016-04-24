@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,6 +108,35 @@ public class ClientDaoImplatation implements Dao<Client,Integer> {
 
     @Override
     public List<Client> listAll() {
+        try {
+            Client cl = new Client();
+            list = new ArrayList<Client>();
+            ps = ex.getSqlSelectAll(con, cl);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                EstadoCivil ec = EstadoCivil.values()[rs.getInt("ESTADOCIVIL")];
+                list.add(new Client(rs.getInt("id"), rs.getString("nome"),
+                        rs.getString("endereco"), rs.getString("telefone"), ec));
+            }
+
+            ps.close();
+            rs.close();
+
+            if (list != null) {
+                return list;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
         return null;
     }
 }

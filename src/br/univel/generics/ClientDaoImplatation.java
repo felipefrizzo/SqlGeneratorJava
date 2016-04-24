@@ -1,6 +1,7 @@
 package br.univel.generics;
 
 import br.univel.database.ConnectionDB;
+import br.univel.enums.EstadoCivil;
 import br.univel.model.Client;
 
 import java.sql.Connection;
@@ -18,7 +19,7 @@ public class ClientDaoImplatation implements Dao<Client,Integer> {
     private Connection con = ConnectionDB.getInstance().open();
     private Execute ex = new Execute();
     private List<Client> list = null;
-    
+
     @Override
     public void save(Client client) {
         try {
@@ -40,6 +41,29 @@ public class ClientDaoImplatation implements Dao<Client,Integer> {
 
     @Override
     public Client search(Integer integer) {
+        try {
+            Client cl = new Client();
+            ps = ex.getSqlSelectById(con, cl, integer);
+            rs = ps.executeQuery();
+            rs.next();
+
+            EstadoCivil ec = EstadoCivil.values()[rs.getInt("ESTADOCIVIL")];
+            cl = new Client(rs.getInt("id"), rs.getString("nome"),
+                    rs.getString("endereco"), rs.getString("telefone"), ec);
+
+            ps.close();
+            rs.close();
+            return cl;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 

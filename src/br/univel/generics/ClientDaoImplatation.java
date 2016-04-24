@@ -69,7 +69,21 @@ public class ClientDaoImplatation implements Dao<Client,Integer> {
 
     @Override
     public void update(Client client) {
+        try {
+            ps = ex.getSqlUpdateById(con, client, client.getId());
+            ps.executeUpdate();
+            ps.close();
 
+            System.out.println("Cliente atualizado com sucesso!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

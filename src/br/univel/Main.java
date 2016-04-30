@@ -76,8 +76,6 @@ public class Main {
         Client cl2 = new Client(2, "Frizzo", "Rua: Jaozinho da Silva", "(45)9970-7070", EstadoCivil.CASADO);
         Client cl3 = new Client(3, "Felipe Felipe", "Rua: Brasil", "(45)9970-7070", EstadoCivil.VIUVO);
 
-        Client cl_update = new Client(1, "Felipe", "Rua: Python <3", "(45)9969-6970", EstadoCivil.CASADO);
-
         Main main = new Main();
         //Table
         main.deleteTable();
@@ -90,7 +88,12 @@ public class Main {
         main.listAll();
         main.search(1);
 
-        main.update(cl_update);
+        cl1.setName("Felipe");
+        cl1.setEndereco("Rua: Python <3");
+        cl1.setTelefone("(45)9969-6970");
+        cl1.setEstadoCivil(EstadoCivil.CASADO);
+
+        main.update(cl1);
         main.delete(2);
 
         main.listAll();
